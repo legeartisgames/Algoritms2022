@@ -1,23 +1,16 @@
 #include <iostream>
+
 bool BinarySearch(const int* begin, const int* end, int target);
 
-int main() {
-  int array_length;
-  std::cin >> array_length;
-  int* increasing_array = new int[array_length];
-
-  for (int i = 0; i < array_length; i++) {
-    std::cin >> increasing_array[i];
-  }
-
-  int number_queries;
+void ProcessQuieries(const int* increasing_array) {
+  size_t number_queries;
   std::cin >> number_queries;
 
-  for (int i = 0; i < number_queries; i++) {
-    int begin_ind;
-    int end_ind;
-    int target_el;
+  size_t begin_ind;
+  size_t end_ind;
+  int target_el;
 
+  for (size_t i = 0; i < number_queries; ++i) {
     std::cin >> begin_ind >> end_ind >> target_el;
     if (BinarySearch(&increasing_array[begin_ind], &increasing_array[end_ind],
                      target_el)) {
@@ -26,7 +19,17 @@ int main() {
       std::cout << "NO" << std::endl;
     }
   }
+}
 
+int main() {
+  size_t array_length;
+  std::cin >> array_length;
+  int* increasing_array = new int[array_length];
+
+  for (size_t i = 0; i < array_length; i++) {
+    std::cin >> increasing_array[i];
+  }
+  ProcessQuieries(increasing_array);
   delete[] increasing_array;
 
   return 0;

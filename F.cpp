@@ -26,16 +26,8 @@ void LSDSortByByte(vector<uint64_t>& shifted, vector<int>& shifted256,
   order_of_numbers.swap(new_order);
 }
 
-int main() {
-  size_t length_of_ar;
-  std::cin >> length_of_ar;
-
-  uint64_t* array = new uint64_t[length_of_ar];
-  for (size_t i = 0; i < length_of_ar; ++i) {
-    std::cin >> array[i];
-  }
-
-  vector<int> order_of_numbers;
+void FulfillLSD(const uint64_t* array, vector<int>& order_of_numbers,
+                size_t length_of_ar) {
   order_of_numbers.reserve(length_of_ar);
   vector<uint64_t> shifted;
   shifted.reserve(length_of_ar);
@@ -50,6 +42,19 @@ int main() {
   for (int i = 0; i < 7; ++i) {
     LSDSortByByte(shifted, shifted256, order_of_numbers, new_order, i);
   }
+}
+int main() {
+  size_t length_of_ar;
+  std::cin >> length_of_ar;
+
+  uint64_t* array = new uint64_t[length_of_ar];
+  for (size_t i = 0; i < length_of_ar; ++i) {
+    std::cin >> array[i];
+  }
+
+  vector<int> order_of_numbers;
+
+  FulfillLSD(array, order_of_numbers, length_of_ar);
   for (size_t i = 0; i < length_of_ar; ++i) {
     std::cout << array[order_of_numbers[i]] << '\n';
   }

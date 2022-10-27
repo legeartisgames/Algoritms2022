@@ -15,64 +15,75 @@ class MinHeap {
  public:
   MinHeap() : data_(kCapacity), size_(0) {}
 
-  std::optional<T> Top() {
-    if (size_ == 0) {
-      return std::nullopt;
-    }
-    return data_[0];
-  }
+  std::optional<T> Top();
+  std::optional<T> ExtractMin();
+  void Insert(T value);
 
-  std::optional<T> ExtractMin() {
-    if (size_ == 0) {
-      return std::nullopt;
-    }
-    std::swap(data_[0], data_[size_ - 1]);
-    --size_;
-    SiftDown(0);
-    return data_[size_];
-  }
-
-  void Insert(T value) {
-    if (size_ == data_.size()) {
-      data_.resize(2 * size_);
-    }
-    data_[size_++] = value;
-    SiftUp(size_ - 1);
-  }
-
-  bool Empty() { return size_ == 0; }
+  bool Empty() const { return size_ == 0; }
 
  private:
-  void SiftUp(size_t index) {
-    if (index > 0) {
-      size_t parent = (index - 1) / 2;
-      if (data_[index] < data_[parent]) {
-        std::swap(data_[index], data_[parent]);
-        SiftUp(parent);
-      }
-    }
-  }
-
-  void SiftDown(size_t index) {
-    size_t i_min = index;
-    size_t i_left_child = index * 2 + 1;
-    size_t i_right_child = index * 2 + 2;
-    if (i_left_child < size_ && data_[i_left_child] < data_[i_min]) {
-      i_min = i_left_child;
-    }
-    if (i_right_child < size_ && data_[i_right_child] < data_[i_min]) {
-      i_min = i_right_child;
-    }
-    if (index != i_min) {
-      std::swap(data_[i_min], data_[index]);
-      SiftDown(i_min);
-    }
-  }
+  void SiftUp(size_t index);
+  void SiftDown(size_t index);
 
   static constexpr size_t kCapacity = 8;
   std::vector<T> data_;
   size_t size_;
 };
+
+template <typename T>
+std::optional<T> MinHeap<T>::Top() {
+  if (size_ == 0) {
+    return std::nullopt;
+  }
+  return data_[0];
+}
+
+template <typename T>
+std::optional<T> MinHeap<T>::ExtractMin() {
+  if (size_ == 0) {
+    return std::nullopt;
+  }
+  std::swap(data_[0], data_[size_ - 1]);
+  --size_;
+  SiftDown(0);
+  return data_[size_];
+}
+
+template <typename T>
+void MinHeap<T>::Insert(T value) {
+  if (size_ == data_.size()) {
+    data_.resize(2 * size_);
+  }
+  data_[size_++] = value;
+  SiftUp(size_ - 1);
+}
+template <typename T>
+void MinHeap<T>::SiftUp(size_t index) {
+  if (index > 0) {
+    size_t parent = (index - 1) / 2;
+    if (data_[index] < data_[parent]) {
+      std::swap(data_[index], data_[parent]);
+      SiftUp(parent);
+    }
+  }
+}
+
+template <typename T>
+void MinHeap<T>::SiftDown(size_t index) {
+  size_t i_min = index;
+  size_t i_left_child = index * 2 + 1;
+  size_t i_right_child = index * 2 + 2;
+  if (i_left_child < size_ && data_[i_left_child] < data_[i_min]) {
+    i_min = i_left_child;
+  }
+  if (i_right_child < size_ && data_[i_right_child] < data_[i_min]) {
+    i_min = i_right_child;
+  }
+  if (index != i_min) {
+    std::swap(data_[i_min], data_[index]);
+    SiftDown(i_min);
+  }
+}
 
 template <typename T>
 std::vector<T> Merge(const std::vector<std::vector<T>>& arrays) {
@@ -102,21 +113,25 @@ std::vector<T> Merge(const std::vector<std::vector<T>>& arrays) {
   return result;
 }
 
-int main() {
-  int number_of_arrays;
-  std::cin >> number_of_arrays;
-  std::vector<std::vector<int>> arrays;
-  int next_ar_size;
-  for (int i = 0; i < number_of_arrays; ++i) {
-    std::cin >> next_ar_size;
+void FillArrays(std::vector<std::vector<int>>& arrays,
+                size_t number_of_arrays) {
+  size_t next_array_size;
+  for (size_t i = 0; i < number_of_arrays; ++i) {
+    std::cin >> next_array_size;
     std::vector<int> next_array;
-    next_array.resize(next_ar_size);
-    for (int j = 0; j < next_ar_size; j++) {
+    next_array.resize(next_array_size);
+    for (size_t j = 0; j < next_array_size; j++) {
       std::cin >> next_array[j];
     }
     arrays.push_back(next_array);
   }
+}
+int main() {
+  size_t number_of_arrays;
+  std::cin >> number_of_arrays;
+  std::vector<std::vector<int>> arrays;
 
+  FillArrays(arrays, number_of_arrays);
   auto result = Merge(arrays);
   for (auto x : result) {
     std::cout << x << ' ';

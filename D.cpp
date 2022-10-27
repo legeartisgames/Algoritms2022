@@ -55,9 +55,9 @@ struct SequenceStruct {
            static_cast<int>(cur_number) < first_numbers.back())) {
         first_numbers.insert(
             first_numbers.begin() + BinarySearch(first_numbers, cur_number),
-            (int)cur_number);
+            static_cast<int>(cur_number));
       }
-      if ((int)first_numbers.size() > first_k) {
+      if (static_cast<int>(first_numbers.size()) > first_k) {
         first_numbers.resize(first_k);
       }
       previous_el = cur_number;

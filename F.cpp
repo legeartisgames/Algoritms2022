@@ -4,7 +4,7 @@
 using std::vector;
 
 void LSDSortByByte(vector<uint64_t>& shifted, vector<int>& shifted256,
-                   vector<int>& order_of_numbers, vector<int>& new_order,
+                   vector<size_t>& order_of_numbers, vector<size_t>& new_order,
                    int order_of_byte) {
   const size_t kPOW8OF2 = 256;
   size_t a_size = order_of_numbers.size();
@@ -26,7 +26,7 @@ void LSDSortByByte(vector<uint64_t>& shifted, vector<int>& shifted256,
   order_of_numbers.swap(new_order);
 }
 
-void FulfillLSD(const uint64_t* array, vector<int>& order_of_numbers,
+void FulfillLSD(const uint64_t* array, vector<size_t>& order_of_numbers,
                 size_t length_of_ar) {
   order_of_numbers.reserve(length_of_ar);
   vector<uint64_t> shifted;
@@ -38,26 +38,34 @@ void FulfillLSD(const uint64_t* array, vector<int>& order_of_numbers,
     order_of_numbers.push_back(i);
   }
 
-  vector<int> new_order(length_of_ar, 0);
+  vector<size_t> new_order(length_of_ar, 0);
   for (int i = 0; i < 7; ++i) {
     LSDSortByByte(shifted, shifted256, order_of_numbers, new_order, i);
   }
 }
+
+void ReadInput(uint64_t* array, size_t length_of_ar) {
+  for (size_t i = 0; i < length_of_ar; ++i) {
+    std::cin >> array[i];
+  }
+}
+void PrintSorted(uint64_t* array, vector<size_t>& order_of_numbers,
+                 size_t length_of_ar) {
+  for (size_t i = 0; i < length_of_ar; ++i) {
+    std::cout << array[order_of_numbers[i]] << '\n';
+  }
+}
+
 int main() {
   size_t length_of_ar;
   std::cin >> length_of_ar;
 
   uint64_t* array = new uint64_t[length_of_ar];
-  for (size_t i = 0; i < length_of_ar; ++i) {
-    std::cin >> array[i];
-  }
+  ReadInput(array, length_of_ar);
 
-  vector<int> order_of_numbers;
-
+  vector<size_t> order_of_numbers;
   FulfillLSD(array, order_of_numbers, length_of_ar);
-  for (size_t i = 0; i < length_of_ar; ++i) {
-    std::cout << array[order_of_numbers[i]] << '\n';
-  }
+  PrintSorted(array, order_of_numbers, length_of_ar);
   delete[] array;
   return 0;
 }

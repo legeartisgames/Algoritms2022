@@ -77,6 +77,17 @@ void QuickSort(int* array, int start_ind, int end_ind) {
     QuickSort(array, new_pivot_ind + 1, end_ind);
   }
 }
+void ReadInput(int* array, size_t length_of_array) {
+  for (size_t i = 0; i < length_of_array; ++i) {
+    std::cin >> array[i];
+  }
+}
+
+void PrintSorted(int* array, size_t length_of_array) {
+  for (size_t i = 0; i < length_of_array; ++i) {
+    std::cout << array[i] << ' ';
+  }
+}
 
 int main() {
   std::ios_base::sync_with_stdio(false);
@@ -86,14 +97,9 @@ int main() {
   size_t length_of_array;
   std::cin >> length_of_array;
   int* array = new int[length_of_array];
-  for (size_t i = 0; i < length_of_array; ++i) {
-    std::cin >> array[i];
-  }
-
+  ReadInput(array, length_of_array);
   QuickSort(array, 0, length_of_array - 1);
-  for (size_t i = 0; i < length_of_array; ++i) {
-    std::cout << array[i] << ' ';
-  }
+  PrintSorted(array, length_of_array);
   delete[] array;
 
   return 0;
